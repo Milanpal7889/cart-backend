@@ -29,6 +29,11 @@ const CartSchema = new Schema({
         type: String,
         default: null
     },
+    quantity:{
+        type: Number,
+        required: true,
+        default: 1
+    },
     // rating:{
     //     value:{
     //         type:Number

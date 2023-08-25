@@ -30,18 +30,20 @@ router.post('/addproduct', fetchuser, [
   body('image')
 ], async (req, res) => {
   try {
-      const { tittle, description, productId, price, category, image} = req.body;
+      const { tittle, description, productId, price, category, image, quantity} = req.body;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
           return res.status(400).json({ errors: errors.array() });
       }
       const Product = new cart({
+          user: req.user.id,
           productId,
           tittle,
           description,
           price,
           category,
-          image
+          image,
+          quantity
       });
       const savedProduct = await Product.save();
       res.send(savedProduct);
@@ -52,6 +54,38 @@ router.post('/addproduct', fetchuser, [
 });
 
 
+// Route 3: Update notes using PUT "api/notes/updatenotes". Login required
+router.put('/updatequantity/:id', fetchuser, async (req, res) => {
+    try {
+        const { quantity } = req.body;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // Create new note object with updated fields
+        const newProduct = {};
+        if (quantity) { newProduct.quantity = quantity; }
+
+        // Find the note to be updated
+        let Product = await cart.findById(req.params.id);
+        if (!Product) {
+            return res.status(404).send("Not Found");
+        }
+
+        // Check if the authenticated user owns the note
+        if (Product.user.toString()!== req.user.id) {
+            return res.status(401).send("Unauthorized");
+        }
+
+        // Update the note in the database and return the updated note
+        Product = await cart.findByIdAndUpdate(req.params.id, { $set: newProduct }, { new: true });
+        res.json({ Product });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal server error");
+    }
+});
 
 
 
