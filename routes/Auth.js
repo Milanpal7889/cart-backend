@@ -12,9 +12,8 @@ router.get('/new',(req, res)=>{
     res.send("working fine")
   })
 
-//     "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRlODQzZDM5YmU5NGQzNWNjNjkxNDgzIn0sImlhdCI6MTY5Mjk0MzMxNn0.9HYpcu2Tx0O_YYqORg99f6kvh7q382NNYRx4Ub_r-bo"
 
-// creating new user no login required at localhost:3000/api/auth/create
+// creating new user no login required at localhost:5000/api/auth/create
 router.post('/create', [
   body('email','please enter valid email').isEmail(),
   body('name', 'enter a valid name').isLength({ min: 3 }),
