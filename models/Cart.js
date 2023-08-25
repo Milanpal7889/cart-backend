@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const CartSchema = new Schema({
     user:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
     },
-    id:{
+    productId:{
         type: Number,
         required: true
     },
@@ -29,14 +29,14 @@ const CartSchema = new Schema({
         type: String,
         default: null
     },
-    rating:{
-        value:{
-            type:Number
-        },
-        count:{
-            type:Number
-        }
-    },
+    // rating:{
+    //     value:{
+    //         type:Number
+    //     },
+    //     count:{
+    //         type:Number
+    //     }
+    // },
     tag:{
         type: String,
         default: "General"
