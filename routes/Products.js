@@ -87,6 +87,31 @@ router.put('/updatequantity/:id', fetchuser, async (req, res) => {
     }
 });
 
+// Route 4: Update notes using DELETE "api/notes/deletenotes". Login required
+router.delete('/deleteproduct/:id', fetchuser, async (req, res) => {
+    try {
+        // Find the note to be deleted
+        let Product = await cart.findById(req.params.id);
+        if (!Product) {
+            return res.status(404).send("Not Found");
+        }
+
+        // Check if the authenticated user owns the note
+        if (Product.user.toString()!== req.user.id) {
+            return res.status(401).send("Unauthorized");
+        }
+
+
+        // Delete the note in the database and return the updated note
+        Product = await cart.findByIdAndDelete(req.params.id);
+        res.json({ "message":"success note has been deleted", Product:Product });
+
+    }catch(error){
+        console.error(error.message);
+        res.status(500).send("Internal server error");
+    }
+})
+
 
 
 module.exports = router;
