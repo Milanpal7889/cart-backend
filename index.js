@@ -11,7 +11,7 @@ app.use(express.json())
 
 // Available Routes
 app.use('/api/auth', require('./routes/Auth'))
-app.use('/api/products', require('./routes/Products'))
+app.use('/api/product', require('./routes/Products'))
 
 
 app.get('/', (req, res) => {
