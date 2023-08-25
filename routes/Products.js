@@ -9,7 +9,7 @@ router.get('/new',(req, res)=>{
     res.send("working fine")
   })
 
-// Route 1: Get all the notes using GET "api/cart/fetchcart"
+// Route 1: Get all the products using GET "api/cart/fetchcart"
 router.get('/fetchcart', fetchuser, async (req, res) => {
     try {
         const cartProducts = await cart.find({ user: req.user.id });
@@ -20,7 +20,7 @@ router.get('/fetchcart', fetchuser, async (req, res) => {
     }
 });
 
-// Route 2: Add notes using POST "api/notes/addnotes"
+// Route 2: Add product using POST "api/product/addproduct"
 router.post('/addproduct', fetchuser, [
   body('productId'),
   body('tittle'),
@@ -54,7 +54,7 @@ router.post('/addproduct', fetchuser, [
 });
 
 
-// Route 3: Update notes using PUT "api/notes/updatenotes". Login required
+// Route 3: Update quantity using PUT "api/product/updatequantity/id". Login required
 router.put('/updatequantity/:id', fetchuser, async (req, res) => {
     try {
         const { quantity } = req.body;
@@ -63,22 +63,22 @@ router.put('/updatequantity/:id', fetchuser, async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        // Create new note object with updated fields
+        // Create new product object with updated fields
         const newProduct = {};
         if (quantity) { newProduct.quantity = quantity; }
 
-        // Find the note to be updated
+        // Find the product to be updated
         let Product = await cart.findById(req.params.id);
         if (!Product) {
             return res.status(404).send("Not Found");
         }
 
-        // Check if the authenticated user owns the note
+        // Check if the authenticated user owns the product
         if (Product.user.toString()!== req.user.id) {
             return res.status(401).send("Unauthorized");
         }
 
-        // Update the note in the database and return the updated note
+        // Update the product in the database and return the updated product
         Product = await cart.findByIdAndUpdate(req.params.id, { $set: newProduct }, { new: true });
         res.json({ Product });
     } catch (error) {
@@ -87,22 +87,22 @@ router.put('/updatequantity/:id', fetchuser, async (req, res) => {
     }
 });
 
-// Route 4: Update notes using DELETE "api/notes/deletenotes". Login required
+// Route 4: Update product using DELETE "api/product/deleteproduct". Login required
 router.delete('/deleteproduct/:id', fetchuser, async (req, res) => {
     try {
-        // Find the note to be deleted
+        // Find the product to be deleted
         let Product = await cart.findById(req.params.id);
         if (!Product) {
             return res.status(404).send("Not Found");
         }
 
-        // Check if the authenticated user owns the note
+        // Check if the authenticated user owns the product
         if (Product.user.toString()!== req.user.id) {
             return res.status(401).send("Unauthorized");
         }
 
 
-        // Delete the note in the database and return the updated note
+        // Delete the product in the database and return the updated product
         Product = await cart.findByIdAndDelete(req.params.id);
         res.json({ "message":"success note has been deleted", Product:Product });
 
