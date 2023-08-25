@@ -34,14 +34,14 @@ const CartSchema = new Schema({
         required: true,
         default: 1
     },
-    // rating:{
-    //     value:{
-    //         type:Number
-    //     },
-    //     count:{
-    //         type:Number
-    //     }
-    // },
+     rating:{
+         value:{
+             type:Number
+         },
+         count:{
+             type:Number
+         }
+     },
     tag:{
         type: String,
         default: "General"

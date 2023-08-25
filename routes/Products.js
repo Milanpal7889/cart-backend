@@ -27,10 +27,11 @@ router.post('/addproduct', fetchuser, [
   body('description', 'Please enter description'),
   body('price'),
   body('category'),
-  body('image')
+  body('image'),
+  body('rating')
 ], async (req, res) => {
   try {
-      const { tittle, description, productId, price, category, image, quantity} = req.body;
+      const { tittle, description, productId, price, category, image, quantity,rating} = req.body;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
           return res.status(400).json({ errors: errors.array() });
@@ -43,7 +44,8 @@ router.post('/addproduct', fetchuser, [
           price,
           category,
           image,
-          quantity
+          quantity,
+          rating
       });
       const savedProduct = await Product.save();
       res.send(savedProduct);
